@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#2f1910">
+  <link rel="icon" href="logo.png" type="image/png">
+  <title>Чучабирени Ахсан — вкус по-домашнему</title>
+  <meta name="description" content="Свежие чучвара и чучвара-плов с доставкой и самовывозом.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="header" id="top">
+    <a class="brand" href="#top" aria-label="На главную">
+      <span class="brand-mark"><img src="logo.png" alt="Логотип Чучабирени Ахсан"></span>
+      <span><strong>Чучабирени</strong><small>Ахсан</small></span>
+    </a>
+    <nav class="nav" aria-label="Главная навигация">
+      <a href="#menu">Меню</a>
+      <a href="#about">О нас</a>
+      <a href="#reviews">Отзывы</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+    <button class="language-button" id="languageButton" type="button" aria-label="Сменить язык">Тоҷикӣ</button>
+    <button class="cart-button" id="cartButton" type="button" aria-label="Открыть корзину">
+      Корзина <span class="cart-count" id="cartCount">0</span>
+    </button>
+    <button class="menu-button" id="menuButton" type="button" aria-expanded="false" aria-label="Открыть меню">☰</button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <span class="eyebrow">Готовим с душой</span>
+        <h1>Настояши<br><em>чучабирен</em> с традиционным вкусом</h1>
+        <p>Свежие ингредиенты, богатый бульон. Всё как дома — только вкуснее.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#menu">Смотреть меню</a>
+          <a class="button button-ghost" href="#contacts">Доставка</a>
+        </div>
+        <div class="hero-info">
+          <span><b>30 мин</b><small>средняя доставка</small></span>
+          <span><b>4.9</b><small>рейтинг гостей</small></span>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="plate">
+          <img src="logo.png" alt="Логотип Чучабирени Ахсан">
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="menu">
+      <div class="section-heading">
+        <div><span class="eyebrow">Наше меню</span><h2>Выберите любимое</h2></div>
+        <div class="filters" role="group" aria-label="Категории меню">
+          <button class="filter active" data-filter="all">Все</button>
+          <button class="filter" data-filter="main">Основные блюда</button>
+          <button class="filter" data-filter="side">Гарниры и добавки</button>
+        </div>
+      </div>
+      <div class="menu-grid" id="menuGrid"></div>
+    </section>
+
+    <section class="about" id="about">
+      <div class="about-image">
+        <img src="about-food.png" alt="Кухня и блюда Чучабирени Ахсан">
+      </div>
+      <div class="about-content">
+        <span class="eyebrow">О нашей кухне</span>
+        <h2>Традиции,<br>которые мы бережём</h2>
+        <p>Мы готовим каждый день: замешиваем тесто, лепим вручную и варим ароматный бульон на мясных косточках. Никаких полуфабрикатов — только честные продукты.</p>
+        <ul><li>Собственное производство</li><li>Свежие продукты ежедневно</li><li>Быстрая доставка по городу</li></ul>
+      </div>
+    </section>
+
+    <section class="reviews section" id="reviews">
+      <div class="section-heading"><div><span class="eyebrow">Отзывы гостей</span><h2>Нас выбирают снова</h2></div></div>
+      <div class="review-grid" id="reviewGrid">
+        <article class="review"><div class="stars">★★★★★</div><p>«Очень вкусно и сытно! Тесто тонкое, начинка сочная, а бульон просто отличный»</p><strong>Малика Р.</strong></article>
+        <article class="review"><div class="stars">★★★★★</div><p>«Заказывал доставку семьёй. Всё приехало горячим, упаковка аккуратная. Обязательно закажем ещё»</p><strong>Шахзод А.</strong></article>
+        <article class="review"><div class="stars">★★★★★</div><p>«Лучшие чучабирен в городе! Узнала за традиционным вкусом детства»</p><strong>Гульмира К.</strong></article>
+      </div>
+      <form class="review-form" id="reviewForm">
+        <h3>Оставьте свой отзыв</h3>
+        <div class="rating-input" id="ratingInput" role="radiogroup" aria-label="Оценка">
+          <button type="button" data-rating="1" aria-label="1 звезда">★</button>
+          <button type="button" data-rating="2" aria-label="2 звезды">★</button>
+          <button type="button" data-rating="3" aria-label="3 звезды">★</button>
+          <button type="button" data-rating="4" aria-label="4 звезды">★</button>
+          <button type="button" data-rating="5" aria-label="5 звёзд">★</button>
+        </div>
+        <input type="text" id="reviewName" maxlength="40" placeholder="Ваше имя" required>
+        <textarea id="reviewText" maxlength="300" rows="4" placeholder="Расскажите, как вам понравилось" required></textarea>
+        <button class="button button-primary" type="submit">Опубликовать отзыв</button>
+      </form>
+    </section>
+
+    <section class="contacts" id="contacts">
+      <div>
+        <span class="eyebrow">Закажите прямо сейчас</span>
+        <h2>Горячая и свежая<br>доставка до двери</h2>
+      </div>
+      <div class="contact-card">
+        <p><strong>Наш адрес</strong><br>г. Вахдат, напротив Медколледжа</p>
+        <p><strong>Работаем ежедневно</strong><br>08:00 — 23:00</p>
+        <a class="button button-primary" href="tel:+992558802222">Позвонить</a>
+        <a class="button button-ghost" href="https://wa.me/992558802222" target="_blank" rel="noopener">Написать в WhatsApp</a>
+        <small>+992 558 80 22 22</small>
+      </div>
+    </section>
+  </main>
+
+  <footer><span>© 2026 Чучабирени Ахсан</span><a href="#top">Наверх ↑</a></footer>
+
+  <aside class="cart-panel" id="cartPanel" aria-hidden="true">
+    <div class="cart-header"><h3>Ваш заказ</h3><button id="closeCart" type="button" aria-label="Закрыть">×</button></div>
+    <div class="cart-items" id="cartItems"><p class="empty-cart">Корзина пока пуста</p></div>
+    <div class="cart-footer"><div><span>Итого</span><strong id="cartTotal">0 сум</strong></div><button class="button button-primary" id="checkoutButton" type="button">Оформить заказ</button></div>
+  </aside>
+  <div class="overlay" id="overlay"></div>
+  <div class="order-modal" id="orderModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="orderModalTitle">
+    <button class="order-modal-close" id="closeOrderModal" type="button" aria-label="Закрыть">×</button>
+    <span class="eyebrow">Оформление заказа</span>
+    <h3 id="orderModalTitle">Ваши данные</h3>
+    <form id="orderForm">
+      <label>Имя<input type="text" id="orderName" placeholder="Как к вам обращаться?" required></label>
+      <label>Телефон<input type="tel" id="orderPhone" placeholder="+992" required></label>
+      <label>Адрес или способ получения<textarea id="orderAddress" rows="3" placeholder="Адрес доставки или «Самовывоз»" required></textarea></label>
+      <div class="order-summary"><span>Итого к оплате</span><strong id="orderTotal">0 сомони</strong></div>
+      <button class="button button-primary" type="submit">Заказать в WhatsApp</button>
+    </form>
+  </div>
+  <div class="toast" id="toast">Добавлено в корзину</div>
+
+  <script src="script.js?v=2"></script>
+</body>
+</html>
