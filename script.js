@@ -15,7 +15,7 @@ const products = [
   {id:22,name:'Шакароб',category:'side',price:20,desc:'Свежий томатный салат с луком и зеленью',image:'shakarob.jpg'},
   {id:23,name:'Греческий',category:'side',price:25,desc:'Свежий овощной салат с сыром',image:'grecheskiy.jpg'},
   {id:24,name:'Асарти',category:'side',price:25,desc:'Ассорти из свежих овощей и зелени',image:'assarti.jpg'},
-  {id:25,name:'Бахор',category:'side',price:20,desc:'Свежая сезонная овощная закуска',image:'salad.png'},
+  {id:25,name:'Бахор',category:'side',price:20,desc:'Свежая сезонная овощная закуска',image:'bahor.jpg'},
   {id:26,name:'Шурак',category:'side',price:25,desc:'Соленья, зелень и свежие овощи к столу',image:'shurak.jpg'},
   {id:27,name:'RC Cola 0.5 л',category:'drink',price:7,desc:'Газированный напиток RC Cola',image:'drink-rc-cola-05.jpg'},
   {id:28,name:'RC Cola 1 л',category:'drink',price:12,desc:'Газированный напиток RC Cola',image:'drink-rc-cola-1.jpg'},
@@ -39,7 +39,7 @@ let cart = {};
 function renderMenu(filter = 'all') {
   menuGrid.innerHTML = products.filter(p => filter === 'all' || p.category === filter).map(p => `
     <article class="menu-card" data-category="${p.category}">
-      <div class="menu-card-image"><img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='logo.png'"></div>
+      <div class="menu-card-image"><img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.style.display='none'"></div>
       <div class="menu-card-body">
         <h3>${translateProductName(p.name)}</h3><p>${translateProductDesc(p.desc)}</p>
         <div class="menu-card-footer"><strong class="price">${formatSum(p.price)}</strong><button class="add-button" type="button" data-id="${p.id}" aria-label="${translateText('addProduct')} ${translateProductName(p.name)}">+</button></div>
