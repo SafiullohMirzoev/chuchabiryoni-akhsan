@@ -37,6 +37,7 @@ const cartItems = document.getElementById('cartItems');
 let cart = {};
 
 function renderMenu(filter = 'all') {
+  if (!menuGrid) return;
   menuGrid.innerHTML = products.filter(p => filter === 'all' || p.category === filter).map(p => `
     <article class="menu-card" data-category="${p.category}">
       <div class="menu-card-image"><img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.style.display='none'"></div>
@@ -51,8 +52,13 @@ function updateCart() {
   const entries = Object.values(cart);
   const count = entries.reduce((sum, item) => sum + item.qty, 0);
   const total = entries.reduce((sum, item) => sum + item.price * item.qty, 0);
-  document.getElementById('cartCount').textContent = count;
-  document.getElementById('cartTotal').textContent = formatSum(total);
+  
+  const cartCountEl = document.getElementById('cartCount');
+  const cartTotalEl = document.getElementById('cartTotal');
+  if (cartCountEl) cartCountEl.textContent = count;
+  if (cartTotalEl) cartTotalEl.textContent = formatSum(total);
+  
+  if (!cartItems) return;
   if (!entries.length) {
     cartItems.innerHTML = `<p class="empty-cart">${translateText('emptyCart')}</p>`;
     return;
@@ -67,64 +73,125 @@ function updateCart() {
 
 function addToCart(id) {
   const product = products.find(p => p.id === id);
+  if (!product) return;
   if (cart[id]) cart[id].qty += 1;
   else cart[id] = {...product, qty:1};
   updateCart();
   const toast = document.getElementById('toast');
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 1800);
+  if (toast) {
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 1800);
+  }
 }
 
 function openCart() {
-  document.getElementById('cartPanel').classList.add('open');
-  document.getElementById('cartPanel').setAttribute('aria-hidden','false');
-  document.getElementById('overlay').classList.add('open');
+  document.getElementById('cartPanel')?.classList.add('open');
+  document.getElementById('cartPanel')?.setAttribute('aria-hidden','false');
+  document.getElementById('overlay')?.classList.add('open');
 }
 function closeCart() {
-  document.getElementById('cartPanel').classList.remove('open');
-  document.getElementById('cartPanel').setAttribute('aria-hidden','true');
-  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('cartPanel')?.classList.remove('open');
+  document.getElementById('cartPanel')?.setAttribute('aria-hidden','true');
+  document.getElementById('overlay')?.classList.remove('open');
 }
 
-renderMenu();
-menuGrid.addEventListener('click', e => { const button=e.target.closest('.add-button'); if(button) addToCart(Number(button.dataset.id)); });
+if (menuGrid) {
+  menuGrid.addEventListener('click', e => { 
+    const button = e.target.closest('.add-button'); 
+    if(button) addToCart(Number(button.dataset.id)); 
+  });
+}
+
 document.querySelectorAll('.filter').forEach(button => button.addEventListener('click', () => {
-  document.querySelectorAll('.filter').forEach(b => b.classList.remove('active')); button.classList.add('active'); renderMenu(button.dataset.filter);
+  document.querySelectorAll('.filter').forEach(b => b.classList.remove('active')); 
+  button.classList.add('active'); 
+  renderMenu(button.dataset.filter);
 }));
-document.getElementById('cartButton').addEventListener('click', openCart);
-document.getElementById('closeCart').addEventListener('click', closeCart);
-document.getElementById('overlay').addEventListener('click', () => { closeCart(); closeOrderModal(); });
-cartItems.addEventListener('click', e => {
-  const button=e.target.closest('button[data-action]'); if(!button)return;
-  const id=Number(button.dataset.id); if(button.dataset.action==='plus') cart[id].qty++; else { cart[id].qty--; if(cart[id].qty<=0) delete cart[id]; }
-  updateCart();
-});
-document.getElementById('checkoutButton').addEventListener('click', () => {
-  if(!Object.keys(cart).length){document.getElementById('toast').textContent='Корзина пуста';document.getElementById('toast').classList.add('show');setTimeout(()=>{document.getElementById('toast').classList.remove('show');document.getElementById('toast').textContent='Добавлено в корзину'},1800);return}
-  const total=Object.values(cart).reduce((sum,item)=>sum+item.price*item.qty,0);
-  document.getElementById('orderTotal').textContent=formatSum(total);
-  document.getElementById('orderModal').classList.add('open');
-  document.getElementById('orderModal').setAttribute('aria-hidden','false');
-  document.getElementById('overlay').classList.add('open');
+
+document.getElementById('cartButton')?.addEventListener('click', openCart);
+document.getElementById('closeCart')?.addEventListener('click', closeCart);
+document.getElementById('overlay')?.addEventListener('click', () => { closeCart(); closeOrderModal(); });
+
+if (cartItems) {
+  cartItems.addEventListener('click', e => {
+    const button = e.target.closest('button[data-action]'); 
+    if(!button) return;
+    const id = Number(button.dataset.id); 
+    if(button.dataset.action === 'plus') {
+      cart[id].qty++; 
+    } else { 
+      cart[id].qty--; 
+      if(cart[id].qty <= 0) delete cart[id]; 
+    }
+    updateCart();
+  });
+}
+
+document.getElementById('checkoutButton')?.addEventListener('click', () => {
+  if(!Object.keys(cart).length){
+    const toast = document.getElementById('toast');
+    if(toast) {
+      toast.textContent = 'Корзина пуста';
+      toast.classList.add('show');
+      setTimeout(()=>{
+        toast.classList.remove('show');
+        toast.textContent = 'Добавлено в корзину';
+      },1800);
+    }
+    return;
+  }
+  const total = Object.values(cart).reduce((sum,item)=>sum+item.price*item.qty,0);
+  const orderTotalEl = document.getElementById('orderTotal');
+  if(orderTotalEl) orderTotalEl.textContent = formatSum(total);
+  
+  document.getElementById('orderModal')?.classList.add('open');
+  document.getElementById('orderModal')?.setAttribute('aria-hidden','false');
+  document.getElementById('overlay')?.classList.add('open');
 });
 
-function closeOrderModal(){document.getElementById('orderModal').classList.remove('open');document.getElementById('orderModal').setAttribute('aria-hidden','true');document.getElementById('overlay').classList.remove('open')}
-document.getElementById('closeOrderModal').addEventListener('click',closeOrderModal);
-document.getElementById('orderForm').addEventListener('submit',event=>{
+function closeOrderModal(){
+  document.getElementById('orderModal')?.classList.remove('open');
+  document.getElementById('orderModal')?.setAttribute('aria-hidden','true');
+  document.getElementById('overlay')?.classList.remove('open');
+}
+
+document.getElementById('closeOrderModal')?.addEventListener('click', closeOrderModal);
+
+document.getElementById('orderForm')?.addEventListener('submit', event => {
   event.preventDefault();
-  const name=document.getElementById('orderName').value.trim();
-  const phone=document.getElementById('orderPhone').value.trim();
-  const address=document.getElementById('orderAddress').value.trim();
-  const entries=Object.values(cart);
-  const total=entries.reduce((sum,item)=>sum+item.price*item.qty,0);
-  const items=entries.map(item=>`${item.name} × ${item.qty} — ${formatSum(item.price*item.qty)}`).join('\n');
-  const message=`Здравствуйте! Хочу оформить заказ:\n\n${items}\n\nИтого: ${formatSum(total)}\nИмя: ${name}\nТелефон: ${phone}\nАдрес/самовывоз: ${address}`;
-  window.open(`https://wa.me/992558802222?text=${encodeURIComponent(message)}`,'_blank','noopener');
-  cart={}; updateCart(); event.target.reset(); closeOrderModal(); closeCart();
+  const name = document.getElementById('orderName')?.value.trim() || '';
+  const phone = document.getElementById('orderPhone')?.value.trim() || '';
+  const address = document.getElementById('orderAddress')?.value.trim() || '';
+  const entries = Object.values(cart);
+  const total = entries.reduce((sum,item)=>sum+item.price*item.qty,0);
+  
+  const items = entries.map(item=>`${item.name} × ${item.qty} — ${formatSum(item.price*item.qty)}`).join('\n');
+  const message = `Здравствуйте! Хочу оформить заказ:\n\n${items}\n\nИтого: ${formatSum(total)}\nИмя: ${name}\nТелефон: ${phone}\nАдрес/самовывоз: ${address}`;
+  
+  // Универсальная ссылка wa.me для мобильных и ПК
+  const whatsappUrl = `https://wa.me/992558802222?text=${encodeURIComponent(message)}`;
+  window.open(whatsappUrl, '_blank', 'noopener');
+  
+  cart = {}; 
+  updateCart(); 
+  event.target.reset(); 
+  closeOrderModal(); 
+  closeCart();
 });
-const menuButton=document.getElementById('menuButton');
-menuButton.addEventListener('click',()=>{const nav=document.querySelector('.nav');const open=nav.classList.toggle('open');menuButton.setAttribute('aria-expanded',String(open))});
-document.querySelectorAll('.nav a').forEach(a=>a.addEventListener('click',()=>{document.querySelector('.nav').classList.remove('open');menuButton.setAttribute('aria-expanded','false')}));
+
+const menuButton = document.getElementById('menuButton');
+if (menuButton) {
+  menuButton.addEventListener('click', () => {
+    const nav = document.querySelector('.nav');
+    const open = nav?.classList.toggle('open');
+    menuButton.setAttribute('aria-expanded', String(open));
+  });
+}
+
+document.querySelectorAll('.nav a').forEach(a => a.addEventListener('click', () => {
+  document.querySelector('.nav')?.classList.remove('open');
+  if(menuButton) menuButton.setAttribute('aria-expanded', 'false');
+}));
 
 let selectedRating = 0;
 const ratingButtons = document.querySelectorAll('#ratingInput button');
@@ -135,7 +202,7 @@ ratingButtons.forEach(button => {
   button.addEventListener('click', () => { selectedRating = Number(button.dataset.rating); paintRating(selectedRating); });
   button.addEventListener('mouseenter', () => paintRating(Number(button.dataset.rating)));
 });
-document.getElementById('ratingInput').addEventListener('mouseleave', () => paintRating(selectedRating));
+document.getElementById('ratingInput')?.addEventListener('mouseleave', () => paintRating(selectedRating));
 
 function createReviewCard(review) {
   const card = document.createElement('article');
@@ -155,33 +222,44 @@ function loadReviews() {
   let saved = [];
   try { saved = JSON.parse(localStorage.getItem('chuchabireniReviews')) || []; } catch (error) { saved = []; }
   const grid = document.getElementById('reviewGrid');
-  saved.slice().reverse().forEach(review => grid.prepend(createReviewCard(review)));
+  if (grid) {
+    saved.slice().reverse().forEach(review => grid.prepend(createReviewCard(review)));
+  }
 }
 
 loadReviews();
-document.getElementById('reviewForm').addEventListener('submit', event => {
+
+document.getElementById('reviewForm')?.addEventListener('submit', event => {
   event.preventDefault();
+  const toast = document.getElementById('toast');
   if (!selectedRating) {
-    document.getElementById('toast').textContent = 'Выберите оценку';
-    document.getElementById('toast').classList.add('show');
-    setTimeout(() => document.getElementById('toast').classList.remove('show'), 1800);
+    if(toast) {
+      toast.textContent = 'Выберите оценку';
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 1800);
+    }
     return;
   }
-  const name = document.getElementById('reviewName').value.trim();
-  const text = document.getElementById('reviewText').value.trim();
+  const name = document.getElementById('reviewName')?.value.trim();
+  const text = document.getElementById('reviewText')?.value.trim();
   if (!name || !text) return;
+  
   let saved = [];
   try { saved = JSON.parse(localStorage.getItem('chuchabireniReviews')) || []; } catch (error) { saved = []; }
-  const review = {name, text, rating:selectedRating};
+  const review = {name, text, rating: selectedRating};
   saved.push(review);
   localStorage.setItem('chuchabireniReviews', JSON.stringify(saved));
-  document.getElementById('reviewGrid').prepend(createReviewCard(review));
+  
+  document.getElementById('reviewGrid')?.prepend(createReviewCard(review));
   event.target.reset();
   selectedRating = 0;
   paintRating(0);
-  document.getElementById('toast').textContent = 'Спасибо за ваш отзыв!';
-  document.getElementById('toast').classList.add('show');
-  setTimeout(() => document.getElementById('toast').classList.remove('show'), 1800);
+  
+  if(toast) {
+    toast.textContent = 'Спасибо за ваш отзыв!';
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 1800);
+  }
 });
 
 const productNames = {
@@ -237,66 +315,6 @@ if (!localStorage.getItem('siteLanguage')) localStorage.setItem('siteLanguage', 
 function applyLanguage() {
   const t = languageText[currentLanguage];
   document.documentElement.lang = currentLanguage === 'tg' ? 'tg' : 'ru';
-  document.getElementById('languageButton').textContent = currentLanguage === 'tg' ? 'РУС' : 'Тоҷикӣ';
-  document.querySelectorAll('.nav a').forEach((el, index) => { el.textContent = t.nav[index]; });
-  document.querySelector('.hero .eyebrow').textContent = t.eyebrow;
-  document.querySelector('.hero h1').innerHTML = t.heroTitle;
-  document.querySelector('.hero-content > p').textContent = t.heroText;
-  document.querySelector('.hero-actions a:nth-child(1)').textContent = t.menu;
-  document.querySelector('.hero-actions a:nth-child(2)').textContent = t.delivery;
-  document.querySelectorAll('.hero-info small').forEach((el, index) => { el.textContent = t.heroInfo[index]; });
-  document.querySelector('#menu .eyebrow').textContent = t.menuEyebrow;
-  document.querySelector('#menu h2').textContent = t.menuTitle;
-  document.querySelector('.filter[data-filter="all"]').textContent = t.all;
-  document.querySelector('.filter[data-filter="main"]').textContent = t.mainFilter;
-  document.querySelector('.filter[data-filter="side"]').textContent = t.sideFilter;
-  document.querySelector('.filter[data-filter="drink"]').textContent = t.drinkFilter;
-  document.querySelector('#about .eyebrow').textContent = t.aboutEyebrow;
-  document.querySelector('#about h2').innerHTML = t.aboutTitle;
-  document.querySelector('#about .about-content > p').textContent = t.aboutText;
-  document.querySelectorAll('#about .about-content li').forEach((el, index) => { el.firstChild.textContent = t.aboutList[index]; });
-  document.querySelector('#reviews .eyebrow').textContent = t.reviewsEyebrow;
-  document.querySelector('#reviews h2').textContent = t.reviewsTitle;
-  Array.from(document.querySelectorAll('#reviewGrid .review')).slice(0, 3).forEach((review, index) => {
-    const text = review.querySelector('p');
-    const name = review.querySelector('strong');
-    if (text) text.textContent = '«' + t.reviewTexts[index] + '»';
-    if (name) name.textContent = t.reviewNames[index];
-  });
-  document.querySelector('#reviewForm h3').textContent = t.reviewTitle;
-  document.querySelector('#reviewName').placeholder = t.reviewName;
-  document.querySelector('#reviewText').placeholder = t.reviewText;
-  document.querySelector('#reviewForm .button').textContent = t.reviewSubmit;
-  document.querySelector('#contacts .eyebrow').textContent = t.contactsEyebrow;
-  document.querySelector('#contacts h2').innerHTML = t.contactsTitle;
-  const contactPs = document.querySelectorAll('#contacts .contact-card p');
-  contactPs[0].innerHTML = t.address;
-  contactPs[1].innerHTML = t.hours;
-  document.querySelector('#contacts .button-primary').textContent = t.call;
-  document.querySelector('#contacts .button-ghost').textContent = t.whatsapp;
-  document.querySelector('footer span').textContent = currentLanguage === 'tg' ? '© 2026 Чӯчабирени Ахсан' : '© 2026 Чучабирени Ахсан';
-  document.querySelector('footer a').textContent = t.toTop;
-  document.getElementById('cartButton').childNodes[0].textContent = t.cart + ' ';
-  document.querySelector('.cart-header h3').textContent = t.cartTitle;
-  document.getElementById('checkoutButton').textContent = t.checkout;
-  document.querySelector('.cart-footer span').textContent = t.total;
-  document.querySelector('#orderModalTitle').textContent = t.orderTitle;
-  const orderLabels = document.querySelectorAll('#orderForm label');
-  orderLabels[0].childNodes[0].textContent = t.orderName;
-  document.getElementById('orderName').placeholder = t.orderNamePlaceholder;
-  orderLabels[1].childNodes[0].textContent = t.orderPhone;
-  orderLabels[2].childNodes[0].textContent = t.orderAddress;
-  document.getElementById('orderAddress').placeholder = t.orderAddressPlaceholder;
-  document.querySelector('.order-summary span').textContent = t.orderPay;
-  document.querySelector('#orderForm button[type="submit"]').textContent = t.orderSubmit;
-  updateCart();
-  const activeFilter = document.querySelector('.filter.active');
-  renderMenu(activeFilter ? activeFilter.dataset.filter : 'all');
-}
-
-applyLanguage();
-document.getElementById('languageButton').addEventListener('click', () => {
-  currentLanguage = currentLanguage === 'ru' ? 'tg' : 'ru';
-  localStorage.setItem('siteLanguage', currentLanguage);
-  applyLanguage();
-});
+  
+  const langBtn = document.getElementById('languageButton');
+  if(langBtn) langBtn.textContent = currentLanguage === 'tg' ? 'РУС' : 'Тоҷикӣ';
