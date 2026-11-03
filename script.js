@@ -39,7 +39,7 @@ let cart = {};
 function renderMenu(filter = 'all') {
   menuGrid.innerHTML = products.filter(p => filter === 'all' || p.category === filter).map(p => `
     <article class="menu-card" data-category="${p.category}">
-      <div class="menu-card-image"><img src="${p.image}" alt="${p.name}" loading="lazy"></div>
+      <div class="menu-card-image"><img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='logo.png'"></div>
       <div class="menu-card-body">
         <h3>${translateProductName(p.name)}</h3><p>${translateProductDesc(p.desc)}</p>
         <div class="menu-card-footer"><strong class="price">${formatSum(p.price)}</strong><button class="add-button" type="button" data-id="${p.id}" aria-label="${translateText('addProduct')} ${translateProductName(p.name)}">+</button></div>
