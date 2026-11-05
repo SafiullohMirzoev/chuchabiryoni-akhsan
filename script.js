@@ -15,7 +15,7 @@ const products = [
   {id:22,name:'Шакароб',category:'side',price:20,desc:'Свежий томатный салат с луком и зеленью',image:'shakarob.jpg'},
   {id:23,name:'Греческий',category:'side',price:25,desc:'Свежий овощной салат с сыром',image:'grecheskiy.jpg'},
   {id:24,name:'Асарти',category:'side',price:25,desc:'Ассорти из свежих овощей и зелени',image:'assarti.jpg'},
-  {id:25,name:'Бахор',category:'side',price:20,desc:'Свежая сезонная овощная закуска',image:'bahor.jpg'},
+  {id:25,name:'Бахор',category:'side',price:20,desc:'Свежая сезонная овощная закуска',image:'bahor-new.jpg'},
   {id:26,name:'Шурак',category:'side',price:25,desc:'Соленья, зелень и свежие овощи к столу',image:'shurak.jpg'},
   {id:27,name:'RC Cola 0.5 л',category:'drink',price:7,desc:'Газированный напиток RC Cola',image:'drink-rc-cola-05.jpg'},
   {id:28,name:'RC Cola 1 л',category:'drink',price:12,desc:'Газированный напиток RC Cola',image:'drink-rc-cola-1.jpg'},
