@@ -481,7 +481,7 @@ footer {
   .nav a::after { display: none; }
   .language-button { margin-left: auto; }
   .cart-button { margin-left: 0; }
-  .menu-button { display: block; }
+  .menu-button { display: block; color: var(--paper); }
   .hero { grid-template-columns: 1fr; padding-top: 54px; }
   .hero h1 { max-width: 700px; }
   .hero-visual { height: 430px; }
