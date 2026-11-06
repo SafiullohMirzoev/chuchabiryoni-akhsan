@@ -119,7 +119,8 @@ document.getElementById('orderForm').addEventListener('submit',event=>{
   const total=entries.reduce((sum,item)=>sum+item.price*item.qty,0);
   const items=entries.map(item=>`${item.name} × ${item.qty} — ${formatSum(item.price*item.qty)}`).join('\n');
   const message=`Здравствуйте! Хочу оформить заказ:\n\n${items}\n\nИтого: ${formatSum(total)}\nИмя: ${name}\nТелефон: ${phone}\nАдрес/самовывоз: ${address}`;
-  window.open(`https://wa.me/992558802222?text=${encodeURIComponent(message)}`,'_blank','noopener');
+  const whatsappUrl=`https://api.whatsapp.com/send?phone=992558802222&text=${encodeURIComponent(message)}`;
+  window.location.assign(whatsappUrl);
   cart={}; updateCart(); event.target.reset(); closeOrderModal(); closeCart();
 });
 const menuButton=document.getElementById('menuButton');
